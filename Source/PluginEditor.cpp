@@ -183,6 +183,137 @@ juce::String RotarySliderWithLabels::getDisplayString() const
     return str;
 }
 
+juce::Rectangle<int> ResponseCurveComponent::getAnalysisArea()
+{
+    auto bounds = getRenderArea();
+    bounds.removeFromTop(4);
+    bounds.removeFromBottom(4);
+    return bounds;
+}
+
+juce::Rectangle<int> ResponseCurveComponent::getRenderArea()
+{
+    auto bounds = getLocalBounds();
+    
+    bounds.removeFromTop(12);
+    bounds.removeFromBottom(2);
+    bounds.removeFromLeft(20);
+    bounds.removeFromRight(20);
+//    bounds.reduce(JUCE_LIVE_CONSTANT(16),
+//                  JUCE_LIVE_CONSTANT(12)
+//                  );
+    
+    return bounds;
+}
+
+void ResponseCurveComponent::resized()
+{
+    using namespace juce;
+    background = Image(Image::PixelFormat::RGB, getWidth(), getHeight(), true);
+    
+    Graphics g(background);
+    
+    Array<float> freqs
+        {
+            20, /*30, 40,*/ 50, 100,
+            200, /*300, 400,*/ 500, 1000,
+            2000, /*3000, 4000,*/ 5000, 10000,
+            20000
+        };
+    
+    auto renderArea = getAnalysisArea();
+    auto left = renderArea.getX();
+    auto right = renderArea.getRight();
+    auto top = renderArea.getY();
+    auto bottom = renderArea.getBottom();
+    auto width = renderArea.getWidth();
+    
+    Array<float> xs;
+        for( auto f : freqs )
+        {
+            auto normX = mapFromLog10(f, 20.f, 20000.f);
+            xs.add( left + width * normX );
+        }
+        
+    g.setColour(Colours::dimgrey);
+        for( auto x : xs )
+        {
+//          g.drawVerticalLine(getWidth() * normX, 0.f, getHeight());
+            g.drawVerticalLine(x, top, bottom);
+        }
+    
+    Array<float> gain
+        {
+            -24, -12, 0, 12, 24
+        };
+        
+        for( auto gDb : gain )
+        {
+            auto y = jmap(gDb, -24.f, 24.f, float(bottom), float(top));
+            g.setColour(gDb == 0.f ? Colour(0u, 172u, 1u) : Colours::darkgrey );
+            g.drawHorizontalLine(y, left, right);
+        }
+    
+    g.setColour(Colours::lightgrey);
+    const int fontHeight = 10;
+    g.setFont(fontHeight);
+    
+    for( int i = 0; i < freqs.size(); ++i )
+        {
+            auto f = freqs[i];
+            auto x = xs[i];
+            bool addK = false;
+            String str;
+            if( f > 999.f )
+            {
+                addK = true;
+                f /= 1000.f;
+            }
+
+            str << f;
+            if( addK )
+                str << "k";
+            str << "Hz";
+            auto textWidth = g.getCurrentFont().getStringWidth(str);
+
+            Rectangle<int> r;
+
+            r.setSize(textWidth, fontHeight);
+            r.setCentre(x, 0);
+            r.setY(1);
+
+            g.drawFittedText(str, r, juce::Justification::centred, 1);
+        }
+    
+    
+    // draws gain labels
+    for( auto gDb : gain )
+    {
+        auto y = jmap(gDb, -24.f, 24.f, float(bottom), float(top));
+        String str;
+        if( gDb > 0 )
+            str << "+";
+        str << gDb;
+        auto textWidth = g.getCurrentFont().getStringWidth(str);
+        Rectangle<int> r;
+        r.setSize(textWidth, fontHeight);
+        r.setX(getWidth() - textWidth);
+        r.setCentre(r.getCentreX(), y);
+        g.setColour(gDb == 0.f ? Colour(0u, 172u, 1u) : Colours::lightgrey );
+        g.drawFittedText(str, r, juce::Justification::centredLeft, 1);
+        
+        str.clear();
+        str << (gDb - 24.f);
+        r.setX(1);
+        textWidth = g.getCurrentFont().getStringWidth(str);
+        r.setSize(textWidth, fontHeight);
+        g.setColour(Colours::lightgrey);
+        g.drawFittedText(str, r, juce::Justification::centredLeft, 1);
+    }
+    
+//    g.drawRect(getRenderArea());
+}
+
 ResponseCurveComponent::ResponseCurveComponent(SimpleEQAudioProcessor& p) : audioProcessor(p)
 {
     const auto& params = audioProcessor.getParameters();
@@ -240,8 +371,11 @@ void ResponseCurveComponent::paint (juce::Graphics& g)
 {
     using namespace juce;
     g.fillAll (Colours::black);
+    
+    g.drawImage(background, getLocalBounds().toFloat());
 
-    auto responseArea = getLocalBounds();
+//    auto responseArea = getRenderArea();
+    auto responseArea = getAnalysisArea();
 
     auto w = responseArea.getWidth();
     
@@ -299,6 +433,8 @@ void ResponseCurveComponent::paint (juce::Graphics& g)
     {
         responseCurve.lineTo(responseArea.getX() + i, map(mags[i]));
     }
+    
+    g.drawRoundedRectangle(getRenderArea().toFloat(), 4.f, 1.f);
     
     g.setColour(Colours::orange);
     g.drawRoundedRectangle(responseArea.toFloat(), 4.f, 1.f);

@@ -67,6 +67,7 @@ juce::Timer
     ResponseCurveComponent(SimpleEQAudioProcessor&);
     ~ResponseCurveComponent();
     
+    void resized() override;
     void paint(juce::Graphics&) override;
     void parameterValueChanged(int parameterIndex, float newValue) override;
     void parameterGestureChanged (int parameterIndex, bool gestureIsStarting) override { }
@@ -77,6 +78,9 @@ juce::Timer
 
 private:
     SimpleEQAudioProcessor& audioProcessor;
+    juce::Image background;
+    juce::Rectangle<int> getRenderArea();
+    juce::Rectangle<int> getAnalysisArea();
     void updateChain();
 };
 
