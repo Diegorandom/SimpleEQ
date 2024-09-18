@@ -80,6 +80,7 @@ private:
     SimpleEQAudioProcessor& audioProcessor;
     juce::Image background;
     juce::Rectangle<int> getRenderArea();
+    juce::Rectangle<int> getAnalysisArea();
     void updateChain();
 };
 
