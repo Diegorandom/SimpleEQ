@@ -361,13 +361,6 @@ void ResponseCurveComponent::parameterValueChanged(int parameterIndex, float new
 
 void ResponseCurveComponent::timerCallback()
 {
-    if( parameterChanged.compareAndSetBool(false, true) )
-    {
-        updateChain();
-        
-        repaint();
-    }
-    
     while( leftChannelFifo->getNumCompleteBuffersAvailable() > 0 )
     {
         if( leftChannelFifo->getAudioBuffer(tempIncomingBuffer) )
@@ -401,8 +394,21 @@ void ResponseCurveComponent::timerCallback()
                     pathProducer.generatePath(fftData, fftBounds, fftSize, binWidth, -48.f);
                 }
             }
+            
+            while( pathProducer.getNumPathsAvailable() > 0 )
+            {
+                pathProducer.getPath( leftChannelFFTPath );
+            }
+            
         }
     }
+    
+    if( parameterChanged.compareAndSetBool(false, true) )
+    {
+        updateChain();
+    }
+    
+    repaint();
 }
 
 void ResponseCurveComponent::updateChain()
@@ -497,6 +503,17 @@ void ResponseCurveComponent::paint (juce::Graphics& g)
     
     g.setColour(Colours::white);
     g.strokePath(responseCurve, PathStrokeType(2.f));
+    
+    for( size_t i = 1; i < mags.size(); ++i )
+    {
+        responseCurve.lineTo(responseArea.getX() + i, map(mags[i]));
+    }
+
+    g.setColour(Colours::blue);
+    g.strokePath(leftChannelFFTPath, PathStrokeType(1.f));
+
+    g.setColour(Colours::orange);
+    g.drawRoundedRectangle(getRenderArea().toFloat(), 4.f, 1.f);
 }
 
 //==============================================================================

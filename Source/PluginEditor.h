@@ -230,6 +230,7 @@ private:
     
     FFTDataGenerator<std::vector<float>> leftChannelFFTDataGenerator;
     AnalyzerPathGenerator<juce::Path> pathProducer;
+    juce::Path leftChannelFFTPath;
 };
 
 //==============================================================================
