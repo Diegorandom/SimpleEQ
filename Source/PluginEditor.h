@@ -186,6 +186,11 @@ struct LookAndFeel : juce::LookAndFeel_V4
                           float     rotaryEndAngle,
                           juce::Slider & slider
                           ) override;
+    
+    void drawToggleButton (juce::Graphics & g,
+                               juce::ToggleButton & button,
+                               bool shouldDrawButtonAsHighlighted,
+                               bool shouldDrawButtonAsDown) override;
 };
 
 struct RotarySliderWithLabels : juce::Slider
@@ -294,6 +299,8 @@ private:
                         peakBypassButtonAttachment,
                         highcutBypassButtonAttachment,
                         analyzerEnabledButtonAttachment;
+    
+    LookAndFeel lnf;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (SimpleEQAudioProcessorEditor)
 };
