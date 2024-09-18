@@ -82,6 +82,8 @@ private:
     juce::Rectangle<int> getRenderArea();
     juce::Rectangle<int> getAnalysisArea();
     void updateChain();
+    SingleChannelSampleFifo<SimpleEQAudioProcessor::BlockType>* leftChannelFifo;
+    juce::AudioBuffer<float> tempIncomingBuffer;
 };
 
 //==============================================================================

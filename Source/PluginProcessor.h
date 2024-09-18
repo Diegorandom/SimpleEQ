@@ -71,14 +71,6 @@ enum Channel
     
 };
 
-enum Channel
-{
-    ///effectively equals 'false' or 0
-    Right,
-    ///effectively equals 'true' or 1
-    Left,
-};
-
 template<typename BlockType>
 struct SingleChannelSampleFifo
 {

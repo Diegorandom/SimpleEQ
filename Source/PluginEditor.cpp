@@ -314,7 +314,7 @@ void ResponseCurveComponent::resized()
 //    g.drawRect(getRenderArea());
 }
 
-ResponseCurveComponent::ResponseCurveComponent(SimpleEQAudioProcessor& p) : audioProcessor(p)
+ResponseCurveComponent::ResponseCurveComponent(SimpleEQAudioProcessor& p) : audioProcessor(p), leftChannelFifo(&audioProcessor.leftChannelFifo)
 {
     const auto& params = audioProcessor.getParameters();
     for(auto param : params)
@@ -346,6 +346,13 @@ void ResponseCurveComponent::timerCallback()
         updateChain();
         
         repaint();
+    }
+    
+    while( leftChannelFifo->getNumCompleteBuffersAvailable() > 0 )
+    {
+        if( leftChannelFifo->getAudioBuffer(tempIncomingBuffer) )
+        {
+        }
     }
 }
 
