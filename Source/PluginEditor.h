@@ -75,6 +75,7 @@ juce::Timer
     
     juce::Atomic<bool> parameterChanged { false };
     MonoChain monochain;
+    juce::AudioBuffer<float> tempIncomingBuffer;
 
 private:
     SimpleEQAudioProcessor& audioProcessor;
@@ -83,7 +84,7 @@ private:
     juce::Rectangle<int> getAnalysisArea();
     void updateChain();
     SingleChannelSampleFifo<SimpleEQAudioProcessor::BlockType>* leftChannelFifo;
-    juce::AudioBuffer<float> tempIncomingBuffer;
+    juce::AudioBuffer<float> monoBuffer;
 };
 
 //==============================================================================
