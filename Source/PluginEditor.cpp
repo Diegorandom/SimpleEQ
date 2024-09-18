@@ -384,8 +384,23 @@ void ResponseCurveComponent::timerCallback()
                         juce::FloatVectorOperations::copy(monoBuffer.getWritePointer(0, monoBuffer.getNumSamples() - size),
                                                                       tempIncomingBuffer.getReadPointer(0, 0),
                                                                       size);
+                        
+                        leftChannelFFTDataGenerator.produceFFTDataForRendering(monoBuffer, -48.f);
                     }
                 }
+            
+            auto fftBounds = getAnalysisArea().toFloat();
+            const auto fftSize = leftChannelFFTDataGenerator.getFFTSize();
+            const auto binWidth = audioProcessor.getSampleRate() / double(fftSize);
+            
+            while( leftChannelFFTDataGenerator.getNumAvailableFFTDataBlocks() > 0 )
+            {
+                std::vector<float> fftData;
+                if( leftChannelFFTDataGenerator.getFFTData( fftData) )
+                {
+                    pathProducer.generatePath(fftData, fftBounds, fftSize, binWidth, -48.f);
+                }
+            }
         }
     }
 }
