@@ -1,18 +1,6 @@
 # Audio Plugin Project with JUCE
 
-Welcome to the **Audio Plugin** project built using **Modern C++** techniques and the **JUCE framework**. This project is based on the book _Modern C++ by Building an Audio Plugin_, where we delve into modern C++ concepts while developing a fully functional audio plugin.
-
-## Table of Contents
-
-- [Introduction](#introduction)
-- [Features](#features)
-- [Requirements](#requirements)
-- [Setup & Installation](#setup--installation)
-- [Usage](#usage)
-- [Project Structure](#project-structure)
-- [Building the Project](#building-the-project)
-- [Contributing](#contributing)
-- [License](#license)
+Welcome to the **Audio Plugin** project built using **Modern C++** techniques and the **JUCE framework**. 
 
 ## Introduction
 
