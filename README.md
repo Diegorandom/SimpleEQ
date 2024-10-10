@@ -2,7 +2,7 @@
 
 Welcome to the **Audio Plugin** project built using **Modern C++** techniques and the **JUCE framework**. 
 [Demo video](https://youtu.be/9pgX9qYmU3c)
-![alt text](https://github.com/Diegorandom/simpleEQ/blob/feature/readme/image.jpg?raw=true)
+![alt text](image.jpg)
 
 
 ## Introduction
