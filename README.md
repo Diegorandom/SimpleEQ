@@ -45,7 +45,7 @@ Follow the instructions on the JUCE website to install the framework.
 3. **Set Up CMake**: 
 Configure CMake for your IDE
 
-## Usage
+## Usage
 Once built, you can load the plugin into a DAW supporting VST3, AU, or AAX formats. You can tweak the parameters in real-time and observe the effects on the processed audio.
 
 ## License
