@@ -240,6 +240,10 @@ juce::Timer
     void parameterValueChanged(int parameterIndex, float newValue) override;
     void parameterGestureChanged (int parameterIndex, bool gestureIsStarting) override { }
     void timerCallback() override;
+    void toggleAnalysisEnablement(bool enabled)
+    {
+        shouldShowFFTAnalysis = enabled;
+    }
     
     juce::Atomic<bool> parameterChanged { false };
     MonoChain monochain;
@@ -247,6 +251,7 @@ juce::Timer
 
 private:
     SimpleEQAudioProcessor& audioProcessor;
+    bool shouldShowFFTAnalysis = true;
     juce::Image background;
     juce::Rectangle<int> getRenderArea();
     juce::Rectangle<int> getAnalysisArea();
