@@ -271,7 +271,7 @@ class SimpleEQAudioProcessorEditor  : public juce::AudioProcessorEditor
 public:
     SimpleEQAudioProcessorEditor (SimpleEQAudioProcessor&);
     ~SimpleEQAudioProcessorEditor() override;
-
+    
     //==============================================================================
     void paint (juce::Graphics&) override;
     void resized() override;
