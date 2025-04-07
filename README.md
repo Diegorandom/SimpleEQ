@@ -1,6 +1,6 @@
-# Audio Plugin Project with JUCE
+# Simple EQ Audio Plugin Project with JUCE
 
-Welcome to the **Audio Plugin** project built using **Modern C++** techniques and the **JUCE framework**. 
+Welcome to the **Simple EQ** project built using **Modern C++** techniques and the **JUCE framework**. 
 [Demo video](https://youtu.be/9pgX9qYmU3c)
 ![alt text](UI.png)
 
